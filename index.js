@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 /**
 * public API infinity that can be called infinity times
 * @function infinity
@@ -20,7 +20,7 @@
 * this function called the infinityCB callback
 * @callback next
 * @param {object} arg - to be passed like third argument to infinityCB
-*                       if is a promise, the next loop is called until be resolved  
+*                       if is a promise, the next loop is called until be resolved
                         and infinityCB is called with resolution value.
 * @return {object} val - null
 */
@@ -36,27 +36,48 @@
 module.exports  = function (il, arg) {
     return new Promise(function(resolve, reject) {
         //**the stop callback*
-        let stopped = false;
+        let stopped = false
+        let res
         let stop = function (error,res) {
+            // if stopped is true here is returned
             if(stopped) return
-            stopped = true;
-            if(error) return reject(error);
-            resolve(res);
-        };
+            // the stopped var is setted to true
+            stopped = true
+            // if error is passed the promise is rejected
+            if(error) return reject(error)
+            // the promise is resolved
+            resolve(res)
+        }
         /**the next callback*/
         let next = function (pass) {
+            // called is setted to true
+            next.called = true
+            // if stopped the routune not flowing
             if(stopped) return
-            if(!stopped && pass && typeof pass.then === 'function') return pass.then(_res=>setImmediate(tried,_res))
+            if(!stopped && pass && typeof pass.then === 'function') {
+                res = pass.then(_res => next(_res))
+                if(typeof res.catch === 'function') res = res.catch(err=>stop(err))
+                return
+            }
+            // is not stopped the loop is called again
             if(!stopped) setImmediate(tried,pass)
         }
+        // the default value to called is false
+        next.called = false
         /**callback to do infinity loop*/
         let tried = function (pass) {
             try {
-                il(next,stop,pass);
+                // called value is setted to false
+                next.called  = false
+                // il is called with next, stop and pass argument passed to next
+                res = il(next,stop,pass)
+                // if is not called in il, then is called with the return value
+                if(!next.called) next(res)
             } catch (err) {
-                reject(err);
+                // if error is catched the promise is rejected
+                reject(err)
             }
-        };
-        setImmediate(tried ,arg);
-    });
-};
+        }
+        setImmediate(tried ,res || arg)
+    })
+}

@@ -1,5 +1,5 @@
 {
-  "name": "infinity",
+  "name": "infinity-node",
   "version": "1.0.0",
   "description": "infinity calling a function given",
   "main": "index.js",
