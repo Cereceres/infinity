@@ -1,3 +1,6 @@
+# Infinity
+Control flow to use a function whats is called infinity times.
+
 ## Install
 
 ```bash
@@ -11,16 +14,23 @@ const infinity = require('infinity')
 require('co-mocha')
 const assert = require('assert')
 let counter = 0;
-let il = function (stop) {
+let il = function (next,stop) {
     if (counter>10) {
-                stop()
+        stop(null,counter)
     }
     counter++
-    return counter
+    next()
 }
 infinity(il).then((res) => {
     assert(res>10)
 })
 ```
 
-## infinity
+## infinity(callback[, arg])-> Promise
+the first time callback function is called with three arguments next, stop and arg
+given when the infinity function is called. This function return a promise.
+### next([object])
+the arg passed to this callback is passed like third param to callback in infinity.
+### stop([error,value])
+When is called the loop is stopped. If error is different to null then the promise returned
+ by infinity is rejected. In otherwise the promise is resolved with value given.
