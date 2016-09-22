@@ -1,0 +1,29 @@
+{
+  "name": "infinity",
+  "version": "1.0.0",
+  "description": "infinity calling a function given",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cereceres/infinity.git"
+  },
+  "keywords": [
+    "loop",
+    "recursion",
+    "infinity",
+    "stack"
+  ],
+  "author": "Jesus Cereceres",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Cereceres/infinity/issues"
+  },
+  "homepage": "https://github.com/Cereceres/infinity#readme",
+  "devDependencies": {
+    "co-mocha": "^1.1.3",
+    "mocha": "^3.0.2"
+  }
+}
