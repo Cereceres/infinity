@@ -6,16 +6,41 @@ const assert = require('assert')
 describe('test to infinity loop', function () {
     before(function () {
         let counter = 0;
-        this.il = function (stop) {
+        this.il = function (next,stop) {
             if (counter>10) {
-                stop()
+                stop(null,counter)
             }
             counter++
-            return counter
+            next()
         };
     });
-it('should return a promise', function* () {
-let res = yield infinity(this.il);
-assert(res>10)
-});
+    it('should return a promise', function* () {
+        let res = yield infinity(this.il);
+        assert(res>10)
+    });
+
+    it('should wait until the promise returned be resolved', function* () {
+        let counter = 0;
+        this.il = function (next,stop,arg) {
+            assert(arg==='test')
+            if (counter>10) {
+                stop(null,counter)
+            }
+            counter++
+            next(Promise.resolve('test'))
+        };
+        let res = yield infinity(this.il,'test');
+        assert(res>10)
+    });
+
+    it('should catch the error', function* () {
+        let counter = 0;
+        this.il = function (next,stop) {
+        stop('error')
+        };
+        yield infinity(this.il)
+        .catch((err) => {
+            assert(err==='error')
+        })
+    });
 })
