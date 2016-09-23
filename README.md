@@ -31,7 +31,8 @@ The first time callback function is called with three arguments next, stop and a
 given when the infinity function is called. This function return a promise.
 ### next([object])
 The arg passed to this callback is passed like third param to callback in infinity.
-If next is not called in callback, then is called when callback is done with the returned valued.
+If next is not called in callback and async property in infinity is false,
+then next is called when callback is done with the returned valued.
 When a promise is passed to next, the loop is called again until the promise is resolved.
 ### stop([error,value])
 When is called the loop is stopped. If error is different to null then the promise returned

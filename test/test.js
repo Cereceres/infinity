@@ -32,7 +32,7 @@ describe('test to infinity loop', function () {
         let res = yield infinity(this.il,'test')
         assert(res>10)
     })
-    it('should follow the flow when next is not called', function* () {
+    it('should follow the flow when next is not called and async mode is false', function* () {
         let counter = 0
         this.il = function (next,stop,arg) {
             assert(arg==='test')
@@ -42,6 +42,7 @@ describe('test to infinity loop', function () {
             counter++
             return Promise.resolve('test')
         }
+        infinity.async = false
         let res = yield infinity(this.il,'test')
         assert(res>10)
     })

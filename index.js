@@ -33,7 +33,7 @@
 * @param {object} vale - value used to resolve the promise
 * @return {object} val - null
 */
-module.exports  = function (il, arg) {
+let infinity = module.exports  = function (il, arg) {
     return new Promise(function(resolve, reject) {
         //**the stop callback*
         let stopped = false
@@ -72,7 +72,7 @@ module.exports  = function (il, arg) {
                 // il is called with next, stop and pass argument passed to next
                 res = il(next,stop,pass)
                 // if is not called in il, then is called with the return value
-                if(!next.called) next(res)
+                if(!next.called && !infinity.async) next(res)
             } catch (err) {
                 // if error is catched the promise is rejected
                 reject(err)
@@ -81,3 +81,4 @@ module.exports  = function (il, arg) {
         setImmediate(tried ,res || arg)
     })
 }
+infinity.async= true
