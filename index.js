@@ -55,8 +55,7 @@ let infinity = module.exports  = function (il, arg) {
             // if stopped the routune not flowing
             if(stopped) return
             if(!stopped && pass && typeof pass.then === 'function') {
-                res = pass.then(_res => next(_res))
-                if(typeof res.catch === 'function') res = res.catch(err=>setImmediate(stop,err))
+                res = pass.then(_res => next(_res)).catch(err=>setImmediate(stop,err))
                 return
             }
             // is not stopped the loop is called again
