@@ -1,7 +1,11 @@
 language: node_js
-
-node_js: "6.1"
-
-script: mocha test
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+sudo: false
+node_js:
+  - "node"
+install:
+  - npm install
+  - npm install mocha -g
+script:
+  - npm test
+services:
+  - mongodb
