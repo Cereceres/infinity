@@ -1,12 +1,10 @@
-'use strict'
 const infinity = require('../index')
-require('co-mocha')
 const assert = require('assert')
-
+let il = null
 describe('test to infinity loop', function () {
     before(function () {
         let counter = 0
-        this.il = function (next,stop) {
+        il = function (next,stop) {
             if (counter>10) {
                 stop(null,counter)
             }
@@ -14,14 +12,14 @@ describe('test to infinity loop', function () {
             next()
         }
     })
-    it('should return a promise', function* () {
-        let res = yield infinity(this.il)
+    it('should return a promise', async() => {
+        let res = await infinity(il)
         assert(res>10)
     })
 
-    it('should wait until the promise returned be resolved', function* () {
+    it('should wait until the promise returned be resolved', async ()=> {
         let counter = 0
-        this.il = function (next,stop,arg) {
+        il = function (next,stop,arg) {
             assert(arg==='test')
             if (counter>10) {
                 stop(null,counter)
@@ -29,12 +27,12 @@ describe('test to infinity loop', function () {
             counter++
             next(Promise.resolve('test'))
         }
-        let res = yield infinity(this.il,'test')
+        let res = await infinity(il,'test')
         assert(res>10)
     })
-    it('should follow the flow when next is not called and async mode is false', function* () {
+    it('should follow the flow when next is not called and async mode is false', async () =>{
         let counter = 0
-        this.il = function (next,stop,arg) {
+        il = function (next,stop,arg) {
             assert(arg==='test')
             if (counter>10) {
                 stop(null,counter)
@@ -43,35 +41,35 @@ describe('test to infinity loop', function () {
             return Promise.resolve('test')
         }
         infinity.async = false
-        let res = yield infinity(this.il,'test')
+        let res = await infinity(il,'test')
         assert(res>10)
     })
 
-    it('should catch the error passed to stop', function* () {
-        this.il = function (next,stop) {
+    it('should catch the error passed to stop', async () =>{
+        il = function (next,stop) {
             stop('error')
         }
-        yield infinity(this.il)
+        await infinity(il)
         .catch((err) => {
             assert(err==='error')
         })
     })
 
-    it('should catch the error thrown', function* () {
-        this.il = function () {
+    it('should catch the error thrown', async () =>{
+        il = function () {
             throw new Error('error thrown')
         }
-        yield infinity(this.il)
+        await infinity(il)
             .catch((err) => {
                 assert(err.message==='error thrown')
             })
     })
 
-    it('should return a promise rejected if a promise rejected is passed to next', function* () {
-        this.il = function () {
+    it('should return a promise rejected if a promise rejected is passed to next', async ()=> {
+        il = function () {
             return Promise.reject('error')
         }
-        yield infinity(this.il)
+        await infinity(il)
             .catch((err) => {
                 assert(err==='error')
             })
