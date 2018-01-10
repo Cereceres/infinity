@@ -4,13 +4,13 @@ Control flow to use a function whats is called infinity times.
 ## Install
 
 ```bash
-$ npm install infinity --save
+$ npm install infinity-node --save
 ```
 
 ## Usage
 
 ```js
-const infinity = require('infinity')
+const infinity = require('infinity-node')
 require('co-mocha')
 const assert = require('assert')
 let counter = 0;
@@ -26,7 +26,7 @@ infinity(il).then((res) => {
 })
 ```
 
-## infinity(callback[, arg])-> Promise
+## infinity-node(callback[, arg])-> Promise
 The first time callback function is called with three arguments next, stop and arg
 given when the infinity function is called. This function return a promise.
 ### next([object])
