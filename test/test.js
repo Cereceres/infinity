@@ -4,10 +4,7 @@ let il = null
 describe('test to infinity loop', function () {
     before(function () {
         let counter = 0
-        il = function (...arg) {
-            const stop = arg[arg.length-1]
-            const next = arg[arg.length-2]
-            const beff = arg.slice(2,arg.length-2)
+        il = function (next, stop) {
             if (counter > 10) stop(null,counter)
             counter++
             next()
@@ -20,7 +17,7 @@ describe('test to infinity loop', function () {
 
     it('should wait until the promise returned be resolved', async ()=> {
         let counter = 0
-        il = function (arg, next,stop) {
+        il = function ( next,stop,arg) {
             assert(arg==='test')
             if (counter>10) stop(null,counter)
             counter++
@@ -32,7 +29,7 @@ describe('test to infinity loop', function () {
 
     it('should stop flow if next is called before stop', async ()=> {
         let counter = 0
-        il = function (arg, next,stop) {
+        il = function (next,stop,arg ) {
             assert(arg==='test')
             if (counter>10) stop(null,counter)
             counter++
@@ -44,7 +41,7 @@ describe('test to infinity loop', function () {
     })
     it('should stop flow if stop is called before next', async ()=> {
         let counter = 0
-        il = function (arg, next,stop) {
+        il = function (next,stop,arg) {
             assert(arg==='test')
             if (counter>10) stop(null,counter)
             counter++
@@ -57,7 +54,7 @@ describe('test to infinity loop', function () {
 
     it('should catch all arguments passed in infinity', async ()=> {
         let counter = 0
-        il = function (arg1, arg2, next,stop) {
+        il = function ( next,stop,arg1, arg2) {
             assert(arg1==='arg1')
             assert(arg2==='arg2')
             if (counter>10) stop(null,counter)
@@ -71,7 +68,7 @@ describe('test to infinity loop', function () {
 
     it('should catch all arguments passed in next', async ()=> {
         let counter = 0
-        il = function (arg1, arg2, next,stop) {
+        il = function ( next,stop, arg1, arg2,) {
             assert(arg1==='arg1')
             assert(arg2==='arg2')
             if (counter>10) stop(null,counter)
@@ -83,7 +80,7 @@ describe('test to infinity loop', function () {
     })
     it('should follow the flow when next is not called and async mode is false', async () =>{
         let counter = 0
-        il = function (arg,next,stop) {
+        il = function (next,stop, arg) {
             assert(arg==='test')
             if (counter>10) {
                 stop(null,counter)
@@ -118,7 +115,7 @@ describe('test to infinity loop', function () {
 
     it('should call next if is not called', async () =>{
         let counter = 0
-        il = function (arg, next, stop) {
+        il = function ( next, stop, arg) {
             assert(arg==='test')
             if (counter>10) stop(null,counter)
             counter++

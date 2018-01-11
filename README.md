@@ -16,7 +16,7 @@ const infinity = require('infinity-node')
 const assert = require('assert')
 let counter = 0;
 
-let il = function (arg,next,stop) {
+let il = function (next,stop, arg) {
     assert(arg ==='arg')
     if (counter>10) {stop(null,counter)
     counter++
@@ -30,7 +30,7 @@ infinity(il).then((res) => {
 
 async ()=> {
     let counter = 0
-    il = function (arg, next,stop) {
+    il = function ( next,stop, arg) {
         assert(arg==='test')
         if (counter>10) stop(null,counter)
         counter++
@@ -43,7 +43,7 @@ async ()=> {
 // example 3, the stop is not called if next is called before
 async ()=> {
     let counter = 0
-    il = function (arg, next,stop) {
+    il = function (next,stop, arg) {
         assert(arg==='test')
         if (counter>10) stop(null,counter)
         counter++
@@ -55,7 +55,7 @@ async ()=> {
 // example 4, the next is not called if stop is called before
 async ()=> {
     let counter = 0
-    il = function (arg, next,stop) {
+    il = function (next,stop, arg) {
         assert(arg==='test')
         if (counter>10) stop(null,counter)
         counter++
@@ -68,7 +68,7 @@ async ()=> {
 // example 5, pass all arguments
 async ()=> {
     let counter = 0
-    il = function (arg1, arg2, next,stop) {
+    il = function (next,stop,arg1, arg2) {
         assert(arg1==='arg1')
         assert(arg2==='arg2')
         if (counter>10) stop(null,counter)
@@ -81,7 +81,7 @@ async ()=> {
 // example 6 if return a promise, wait until promise is resolved or rejected
 async () =>{
     let counter = 0
-    il = function (arg,next,stop) {
+    il = function (next,stop,arg) {
         assert(arg==='test')
         if (counter>10) {
             stop(null,counter)

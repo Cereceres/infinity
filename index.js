@@ -30,7 +30,7 @@ const infinity = module.exports = (il, ...arg) => {
             try {
                 next[called] = false;
                 stop[stopped] = false;
-                const returned = il(...pass, next, stop);
+                const returned = il(next, stop, ...pass);
                 if(stop[stopped] || next[called]) return;
                 process.nextTick(next, returned);
             } catch (err) {
