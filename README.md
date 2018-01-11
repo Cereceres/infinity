@@ -1,6 +1,6 @@
 # Infinity
 Control flow to use a function whats is called infinity times.
-nodejs > 7 is required.
+nodejs > 6 is required.
 
 ## Install
 
